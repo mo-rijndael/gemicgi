@@ -35,25 +35,25 @@ class Status:
 
 
 class Request:
-    GATEWAY_INTERFACE: str
-    SERVER_SOFTWARE: str
-    GEMINI_URL: urlparse
-    SCRIPT_NAME: str
-    PATH_INFO: str
-    QUERY_STRING: unquote
-    SERVER_NAME: str
-    HOSTNAME: str
-    SERVER_PORT: int
-    REMOTE_HOST: str
-    REMOTE_ADDR: str
-    TLS_CLIENT_HASH: str
-    TLS_CLIENT_NOT_BEFORE: datetime.fromisoformat
-    TLS_CLIENT_NOT_AFTER: datetime.fromisoformat
-    REMOTE_USER: str
+    gateway_interface:      str
+    server_software:        str
+    gemini_url:             urlparse
+    script_name:            str
+    path_info:              str
+    query_string:           unquote
+    server_name:            str
+    hostname:               str
+    server_port:            int
+    remote_host:            str
+    remote_addr:            str
+    tls_client_hash:        str
+    tls_client_not_before:  datetime.fromisoformat
+    tls_client_not_after:   datetime.fromisoformat
+    remote_user:            str
 
     def __init__(self):
         for var, parser in self.__annotations__.items():
-            self.__dict__[var.lower()] = parser(environ[var])
+            self.__dict__[var] = parser(environ[var.upper()])
 
 
 class Cgi:

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gemicgi"
-version = "0.1.0"
+version = "0.1.1"
 description = "Very simple module for CGI scripts for gemini (especially Stargazer, but it has compatible CGI)"
 authors = ["Mo Rijndael <hello@rijndael.cc>"]
 license = "Unlicense"
