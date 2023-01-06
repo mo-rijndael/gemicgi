@@ -4,8 +4,9 @@ from datetime import datetime
 from io import StringIO
 from os import environ
 from pathlib import Path
-from typing import TextIO
-from urllib.parse import urlparse, unquote
+from typing import TextIO, Union, Iterable
+from urllib.parse import urlparse, unquote, quote
+from contextlib import contextmanager
 
 
 GEMINI_MIME = "text/gemini"
@@ -92,3 +93,40 @@ class Cgi:
             return self.error(Status.NOT_FOUND, "Not Found")
         self.buffer = file.open()
         self.meta = mimetypes.guess_type(file)[0] or GEMINI_MIME
+
+    # Beautiful API goes here
+    def line(self, line: str):
+        self.buffer.write(f"{line}\r\n")
+
+    def h1(self, heading: str):
+        self.line(f"# {heading}")
+
+    def h2(self, heading: str):
+        self.line(f"## {heading}")
+
+    def h3(self, heading: str):
+        self.line(f"### {heading}")
+
+    def link(self, url: str, text: str = None, percent_encode=False):
+        if percent_encode:
+            url = quote(url)
+        if text:
+            self.line(f"=> {url} {text}")
+        else:
+            self.line(f"=> {url}")
+
+    def quote(self, text: str):
+        self.line(f"> {text}")
+
+    @contextmanager
+    def preformat(self, additional: str = ""):
+        self.line(f"```{additional}")
+        yield
+        self.line("```")
+
+    def list(self, data: Union[str, Iterable[str]]):
+        if isinstance(data, str):
+            return self.line(f"* {data}")
+        else:
+            for i in data:
+                self.list(i)

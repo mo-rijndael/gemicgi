@@ -52,6 +52,29 @@ with gemicgi.Cgi() as cgi:
 # No manual flush() required. Also, it will automatically return code 42(CGI_ERROR) on unhandled exception
 ```
 
+Also, there is a nice wrappers for filling buffer!
+```python
+import gemicgi
+
+with gemicgi.Cgi() as cgi:
+    cgi.h1("Gemtext example")
+    cgi.line("Plain text line")
+    cgi.quote("Wise quote")
+    cgi.link("gemini://wise-man.example.org", "Author")
+    with cgi.preformat():
+        # Write to buffer any way you like, context manager close preformat automatically
+        cgi.line("Like this")
+        cgi.buffer.write("Or like this\r\n")
+        cgi.h1("This won't be rendered, but why not?")
+    cgi.list("List element...")
+    cgi.list([
+        "Bunch",
+        "Of",
+        "List",
+        "Elements"
+    ])
+```
+
 # TODOs:
 - A way to set response code not via error (not all codes are errors)
 - GitHub CI to build wheels
