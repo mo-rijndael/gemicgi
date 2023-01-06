@@ -1,7 +1,6 @@
 import mimetypes
 import sys
 from datetime import datetime
-from traceback import print_exc
 from io import StringIO
 from os import environ
 from pathlib import Path
@@ -66,7 +65,7 @@ class Cgi:
         self.request = Request()
         self.response_code = Status.SUCCESS
         self.meta = "text/gemini"
-        self.buffer = StringIO()
+        self.buffer = StringIO(newline='\r\n')
 
     def __enter__(self):
         return self
