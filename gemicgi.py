@@ -13,6 +13,7 @@ GEMINI_MIME = "text/gemini"
 mimetypes.add_type(GEMINI_MIME, "gmi")
 mimetypes.add_type(GEMINI_MIME, "gemini")
 
+
 class Status:
     INPUT = 10
     SENSITIVE_INPUT = 11
@@ -95,8 +96,23 @@ class Cgi:
         self.meta = mimetypes.guess_type(file)[0] or GEMINI_MIME
 
     # Beautiful API goes here
+    def _line_finished(self) -> bool:
+        if self.buffer.tell() == 0:
+            return True
+        try:
+            self.buffer.seek(self.buffer.tell() - 2)
+        except ValueError:
+            return False
+        last_two = self.buffer.read(2)
+        return last_two == '\r\n'
+
+    def ensure_newline(self):
+        if not self._line_finished():
+            self.buffer.write('\n')
+
     def line(self, line: str):
-        self.buffer.write(f"{line}\r\n")
+        self.ensure_newline()
+        self.buffer.write(f"{line}\n")
 
     def h1(self, heading: str):
         self.line(f"# {heading}")

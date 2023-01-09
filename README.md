@@ -64,7 +64,7 @@ with gemicgi.Cgi() as cgi:
     with cgi.preformat():
         # Write to buffer any way you like, context manager close preformat automatically
         cgi.line("Like this")
-        cgi.buffer.write("Or like this\r\n")
+        cgi.buffer.write("Or like this\n")
         cgi.h1("This won't be rendered, but why not?")
     cgi.list("List element...")
     cgi.list([
