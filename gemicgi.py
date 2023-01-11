@@ -5,7 +5,7 @@ from io import StringIO
 from os import environ
 from pathlib import Path
 from typing import TextIO, Union, Iterable
-from urllib.parse import urlparse, unquote, quote
+from urllib.parse import urlparse, unquote, quote, ParseResult
 from contextlib import contextmanager
 
 
@@ -38,24 +38,25 @@ class Status:
 class Request:
     gateway_interface:      str
     server_software:        str
-    gemini_url:             urlparse
+    gemini_url:             ParseResult = urlparse
     script_name:            str
     path_info:              str
-    query_string:           unquote
+    query_string:           str = unquote
     server_name:            str
     hostname:               str
     server_port:            int
     remote_host:            str
     remote_addr:            str
     tls_client_hash:        str
-    tls_client_not_before:  datetime.fromisoformat
-    tls_client_not_after:   datetime.fromisoformat
+    tls_client_not_before:  datetime = datetime.fromisoformat
+    tls_client_not_after:   datetime = datetime.fromisoformat
     remote_user:            str
 
     def __init__(self):
-        for var, parser in self.__annotations__.items():
-            value = environ.get(var.upper())
-            if value is not None:
+        for var, type_ in self.__annotations__.items():
+            parser = self.__class__.__dict__.get(var)
+            value = environ[var.upper()]
+            if parser:
                 value = parser(value)
             self.__dict__[var] = value
 
