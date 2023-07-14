@@ -85,6 +85,7 @@ class Cgi:
         header = f"{self.response_code} {self.meta}\r\n"
         to.write(header)
         if self.response_code == Status.SUCCESS:
+            self.buffer.seek(0)
             to.writelines(self.buffer)
         to.flush()
 
