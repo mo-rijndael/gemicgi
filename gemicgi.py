@@ -54,7 +54,10 @@ class Request:
 
     def __init__(self):
         for var, parser in self.__annotations__.items():
-            self.__dict__[var] = parser(environ[var.upper()])
+            value = environ.get(var.upper())
+            if value is not None:
+                value = parser(value)
+            self.__dict__[var] = value
 
 
 class Cgi:
