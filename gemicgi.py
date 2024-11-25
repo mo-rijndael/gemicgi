@@ -44,7 +44,7 @@ class Request:
     query_string:           str = unquote
     server_name:            str
     hostname:               str
-    server_port:            int
+    server_port:            int = int
     remote_host:            str
     remote_addr:            str
     tls_client_hash:        str
