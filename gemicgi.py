@@ -1,9 +1,12 @@
+#!/usr/bin/env python3
+
 import mimetypes
 import sys
 from datetime import datetime
 from io import StringIO
 from os import environ
 from pathlib import Path
+from enum import IntEnum
 from typing import TextIO, Union, Iterable
 from urllib.parse import urlparse, unquote, quote, ParseResult
 from contextlib import contextmanager
@@ -14,7 +17,7 @@ mimetypes.add_type(GEMINI_MIME, "gmi")
 mimetypes.add_type(GEMINI_MIME, "gemini")
 
 
-class Status:
+class Status(IntEnum):
     INPUT = 10
     SENSITIVE_INPUT = 11
     SUCCESS = 20
