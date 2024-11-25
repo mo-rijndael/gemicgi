@@ -162,3 +162,8 @@ class Cgi:
                 self.list(i)
 
 cgi = Cgi()
+
+
+if __name__ == "__main__":
+    with cgi:
+        cgi.serve_static(Path(__file__))
