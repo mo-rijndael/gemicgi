@@ -62,16 +62,22 @@ class Request:
 
 
 class Cgi:
-    request: Request
+    _request: Request | None
     response_code: int
     meta: str
     buffer: TextIO
 
     def __init__(self):
-        self.request = Request()
+        self._request = None
         self.response_code = Status.SUCCESS
         self.meta = "text/gemini"
         self.buffer = StringIO(newline='\r\n')
+
+    @property
+    def request(self) -> Request:
+        if self._request is None:
+            self._request = Request()
+        return self._request
 
     def __enter__(self):
         return self
@@ -151,3 +157,5 @@ class Cgi:
         else:
             for i in data:
                 self.list(i)
+
+cgi = Cgi()
